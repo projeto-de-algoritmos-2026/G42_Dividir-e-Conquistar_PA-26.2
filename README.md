@@ -6,7 +6,11 @@
 
 ---
 
-## 📌 Sobre o Projeto
+## Vídeo de Apresentação
+
+[Link para o vídeo da apresentação](https://www.youtube.com/watch?v=044XNtsXYtk)
+
+##  Sobre o Projeto
 O **UrbanRoutingDelivery** é um sistema distribuído de roteamento e otimização logística. O projeto evolui a cada módulo da disciplina, acumulando algoritmos para resolver diferentes problemas do mundo real de forma integrada. 
 
 A arquitetura utiliza **Separação de Responsabilidades (Separation of Concerns)**:
@@ -14,7 +18,7 @@ A arquitetura utiliza **Separação de Responsabilidades (Separation of Concerns
 2. **API (Node.js):** Camada de integração (`execFile`) que expõe os cálculos matemáticos de forma segura via HTTP/JSON.
 3. **Frontend (React/Vite):** Interface gráfica interativa em Tailwind CSS com renderização de mapas em SVG.
 
-## 🧠 Módulos Desenvolvidos
+##  Módulos Desenvolvidos
 
 ### Módulo 1: Grafos (Dijkstra)
 Resolve o problema clássico de deslocamento na malha urbana encontrando a rota de menor distância. Modelado como um **Grafo Não-Direcionado, Ponderado e Desconexo** (para validação de falhas em pontos isolados).
@@ -26,7 +30,7 @@ Otimiza a agenda do entregador. Utilizando a heurística *Earliest Finish Time F
 Identifica agrupamentos espaciais estratégicos determinando os dois pontos de entrega geograficamente mais próximos em um plano 2D. 
 O algoritmo divide o plano recursivamente garantindo complexidade de tempo de **$O(N \log N)$**. Ele ordena os pontos por coordenadas $X$ e $Y$, resolve as metades separadamente e valida uma faixa central (*strip*) limitando as comparações a um máximo de 7 vizinhos, descartando a ineficiência de $O(N^2)$ da força bruta.
 
-## 🚀 Como Executar Localmente
+##  Como Executar Localmente
 
 **Pré-requisitos:** `CMake`, `g++`, `Node.js` e `npm`.
 
