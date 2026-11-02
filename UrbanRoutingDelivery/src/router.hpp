@@ -1,10 +1,13 @@
 #pragma once
 
+#include "closest_pair.hpp"
 #include "graph.hpp"
 #include "greedy/scheduler.hpp"
 
 #include <string>
 #include <unordered_map>
+#include <utility>
+#include <vector>
 
 class Router {
 public:
@@ -18,6 +21,8 @@ public:
     void addDeliveryTask(const std::string& id, const std::string& destination, int startTime, int endTime);
     std::string getOptimalScheduleJson();
 
+    std::string getClosestPairJson(const std::vector<std::pair<std::string, std::pair<double, double>>>& customPoints = {});
+
 private:
     int registerLocation(const std::string& name);
 
@@ -27,4 +32,5 @@ private:
     std::unordered_map<int, std::string> idToName;
     Graph graph;
     DeliveryScheduler scheduler;
+    ClosestPairFinder closestPairFinder;
 };

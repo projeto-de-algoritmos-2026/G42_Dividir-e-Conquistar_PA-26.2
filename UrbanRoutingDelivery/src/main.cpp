@@ -3,8 +3,40 @@
 #include <exception>
 #include <iostream>
 #include <string>
+#include <utility>
+#include <vector>
 
 int main(int argc, char* argv[]) {
+    if (argc >= 2 && std::string(argv[1]) == "--closest-pair") {
+        Router router(0);
+
+        if (argc == 2) {
+            std::cout << router.getClosestPairJson() << std::endl;
+            return 0;
+        }
+
+        std::vector<std::pair<std::string, std::pair<double, double>>> customPoints;
+
+        if ((argc - 2) % 3 != 0) {
+            std::cout << "{\"status\": \"error\", \"message\": \"Argumentos invalidos\"}" << std::endl;
+            return 1;
+        }
+
+        try {
+            for (int i = 2; i + 2 < argc; i += 3) {
+                std::string id = argv[i];
+                double x = std::stod(argv[i + 1]);
+                double y = std::stod(argv[i + 2]);
+                customPoints.push_back({id, {x, y}});
+            }
+            std::cout << router.getClosestPairJson(customPoints) << std::endl;
+            return 0;
+        } catch (const std::exception& e) {
+            std::cout << "{\"status\": \"error\", \"message\": \"" << e.what() << "\"}" << std::endl;
+            return 1;
+        }
+    }
+
     if (argc >= 2 && std::string(argv[1]) == "--schedule") {
         Router router(100);
 

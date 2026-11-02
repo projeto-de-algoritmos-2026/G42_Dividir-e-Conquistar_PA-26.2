@@ -3,8 +3,25 @@
 #include <iomanip>
 #include <limits>
 #include <sstream>
+#include <utility>
+#include <vector>
 
 namespace {
+
+const std::vector<std::pair<std::string, std::pair<double, double>>> defaultDFPoints = {
+    {"Centro de Distribuicao", {44.0, 47.0}},
+    {"Asa Sul", {53.0, 59.0}},
+    {"Taguatinga", {25.0, 65.0}},
+    {"Samambaia", {20.0, 89.0}},
+    {"Ceilandia", {13.0, 74.0}},
+    {"Sudoeste", {34.0, 51.0}},
+    {"Asa Norte", {51.0, 35.0}},
+    {"Lago Norte", {63.0, 25.0}},
+    {"Lago Sul", {67.0, 67.0}},
+    {"Jardim Botanico", {78.0, 80.0}},
+    {"Sobradinho", {57.0, 9.0}},
+    {"Deposito Isolado", {87.0, 13.0}}
+};
 
 std::string escapeJsonString(const std::string& value) {
     std::ostringstream stream;
@@ -155,6 +172,30 @@ std::string Router::getOptimalScheduleJson() {
                << ", \"rejected\": " << serializeTasks(result.rejectedTasks) << "}";
         return stream.str();
     } catch (const std::exception& error) {
+        return buildErrorJson(error.what());
+    }
+}
+
+std::string Router::getClosestPairJson(const std::vector<std::pair<std::string, std::pair<double, double>>>& customPoints) {
+    try {
+        closestPairFinder.clearPoints();
+
+        const auto& pointsToUse = customPoints.empty() ? defaultDFPoints : customPoints;
+
+        for (const auto& pt : pointsToUse) {
+            closestPairFinder.addPoint(pt.first, pt.second.first, pt.second.second);
+        }
+
+        ClosestPairResult result = closestPairFinder.findClosestPair();
+
+        std::ostringstream stream;
+        stream << "{\"status\": \"success\", \"pointA\": {\"id\": \"" << escapeJsonString(result.pointA.id)
+               << "\", \"x\": " << formatNumber(result.pointA.x) << ", \"y\": " << formatNumber(result.pointA.y)
+               << "}, \"pointB\": {\"id\": \"" << escapeJsonString(result.pointB.id)
+               << "\", \"x\": " << formatNumber(result.pointB.x) << ", \"y\": " << formatNumber(result.pointB.y)
+               << "}, \"distance\": " << formatNumber(result.distance) << "}";
+        return stream.str();
+    } catch (const std::invalid_argument& error) {
         return buildErrorJson(error.what());
     }
 }
