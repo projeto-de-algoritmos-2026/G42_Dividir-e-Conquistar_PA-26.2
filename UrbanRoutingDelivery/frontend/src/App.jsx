@@ -94,6 +94,7 @@ export default function App() {
         e.preventDefault();
         if (!cpSourceId || !cpPointX || !cpPointY) return;
         if (customPoints.find(p => p.id === cpSourceId)) return;
+        setCpResult(null);
         setCustomPoints([...customPoints, { id: cpSourceId, x: parseFloat(cpPointX), y: parseFloat(cpPointY) }]);
         setCpSourceId('');
         setCpPointX('');
@@ -101,13 +102,14 @@ export default function App() {
     };
 
     const handleRemovePoint = (id) => {
+        setCpResult(null);
         setCustomPoints(customPoints.filter(p => p.id !== id));
     };
 
     const handleClosestPair = async () => {
-        setCpLoading(true);
-        setCpError('');
         setCpResult(null);
+        setCpError('');
+        setCpLoading(true);
         try {
             const res = await fetch('http://localhost:3000/api/closest-pair', {
                 method: 'POST',
@@ -153,6 +155,18 @@ export default function App() {
                     >
                         Agrupar
                     </button>
+                </div>
+
+                <div className="px-6 py-4 border-b border-gray-800">
+                    <h2 className="text-xs font-semibold text-gray-500 tracking-widest mb-3">MALHA URBANA</h2>
+                    <ul className="space-y-1.5 max-h-44 overflow-y-auto">
+                        {COORDENADAS.map((c) => (
+                            <li key={c.id} className="flex items-center gap-2 text-xs text-gray-300">
+                                <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0"></span>
+                                <span className="truncate">{c.id}</span>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
 
                 <div className="flex-1 overflow-y-auto p-6 space-y-6">
